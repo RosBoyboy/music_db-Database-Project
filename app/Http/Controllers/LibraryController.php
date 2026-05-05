@@ -120,7 +120,7 @@ class LibraryController extends Controller
                 });
         }
 
-        return Inertia::render('LikedSongs', [
+        return Inertia::render('User/LikedSongs', [
             'likedTracks' => $likes,
         ]);
     }
@@ -155,7 +155,7 @@ class LibraryController extends Controller
                 });
         }
 
-        return Inertia::render('History', [
+        return Inertia::render('User/History', [
             'historyTracks' => $history,
         ]);
     }

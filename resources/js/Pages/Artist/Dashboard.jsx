@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '@/Layouts/MainLayout';
 
 export default function Upload() {
     const { auth } = usePage().props;
@@ -195,6 +195,13 @@ export default function Upload() {
                                                     <div className="flex items-center gap-2 mt-1">
                                                         <span className="text-xs text-gray-400">{new Date(track.created_at).toLocaleDateString()}</span>
                                                         <span className="text-[10px] uppercase font-bold tracking-wider text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-sm">Local</span>
+                                                        <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm ${
+                                                            track.status === 'approved' ? 'text-green-400 bg-green-400/10' :
+                                                            track.status === 'rejected' ? 'text-red-400 bg-red-400/10' :
+                                                            'text-yellow-400 bg-yellow-400/10'
+                                                        }`}>
+                                                            {track.status || 'pending'}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

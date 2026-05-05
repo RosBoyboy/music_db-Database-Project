@@ -33,7 +33,7 @@ class PlaylistController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Playlists/Create');
+        return Inertia::render('User/Playlists/Create');
     }
 
     /**
@@ -106,7 +106,7 @@ class PlaylistController extends Controller
                 ];
             });
 
-        return Inertia::render('Playlists/Show', [
+        return Inertia::render('User/Playlists/Show', [
             'playlist' => $playlist,
             'tracks'   => $tracks,
             'isOwner'  => $user && $user->id === $playlist->user_id,

@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 
 // ── Public Pages ──────────────────────────────────────────────────────
-Route::get('/', fn() => Inertia::render('Landing'));
+Route::get('/', fn() => Inertia::render('Guest/Landing'));
 Route::get('/login', fn() => Inertia::render('Auth/Login'))->name('login');
 
 // ── Authentication ────────────────────────────────────────────────────
@@ -39,7 +39,7 @@ use App\Http\Controllers\TrackUploadController;
 
 Route::middleware('auth')->group(function () {
     // The Upload page handles the is_artist check internally (shows "Become Artist" button)
-    Route::get('/upload', fn() => Inertia::render('Upload'))->name('upload.index');
+    Route::get('/upload', fn() => Inertia::render('Artist/Dashboard'))->name('upload.index');
     Route::post('/become-artist', [TrackUploadController::class, 'becomeArtist'])->name('become.artist');
 
     // API endpoints for track management (artist-only operations guarded in controller)
@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
         Route::get('/tracks', [\App\Http\Controllers\AdminController::class, 'tracks'])->name('admin.tracks');
         Route::delete('/tracks/{id}', [\App\Http\Controllers\AdminController::class, 'deleteTrack'])->name('admin.tracks.delete');
+        Route::post('/tracks/{id}/approve', [\App\Http\Controllers\AdminController::class, 'approveTrack'])->name('admin.tracks.approve');
+        Route::post('/tracks/{id}/reject', [\App\Http\Controllers\AdminController::class, 'rejectTrack'])->name('admin.tracks.reject');
     });
 });
 

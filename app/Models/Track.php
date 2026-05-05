@@ -20,6 +20,7 @@ class Track extends Model
         'source',
         'file_path',
         'uploaded_by',
+        'status',
     ];
 
     public function artist()

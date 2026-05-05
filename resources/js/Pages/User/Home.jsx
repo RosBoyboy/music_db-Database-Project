@@ -1,8 +1,8 @@
 import React from 'react';
 import { Head, router, Link } from '@inertiajs/react';
-import MainLayout from '../Layouts/MainLayout';
-import TrackCard from '../Components/TrackCard';
-import PlaylistItem from '../Components/PlaylistItem';
+import MainLayout from '@/Layouts/MainLayout';
+import TrackCard from '@/Components/Common/TrackCard';
+import PlaylistItem from '@/Components/User/PlaylistItem';
 import { ChevronRight, Play, Home as HomeIcon } from 'lucide-react';
 
 export default function Home({ recommendedTracks, newReleases, recentTracks, userPlaylists, featuredPlaylist }) {

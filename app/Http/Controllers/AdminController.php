@@ -75,4 +75,20 @@ class AdminController extends Controller
 
         return redirect()->back()->with('status', 'Track deleted successfully.');
     }
+
+    public function approveTrack(Request $request, $id)
+    {
+        $track = Track::findOrFail($id);
+        $track->status = 'approved';
+        $track->save();
+        return redirect()->back()->with('status', 'Track approved successfully.');
+    }
+
+    public function rejectTrack(Request $request, $id)
+    {
+        $track = Track::findOrFail($id);
+        $track->status = 'rejected';
+        $track->save();
+        return redirect()->back()->with('status', 'Track rejected successfully.');
+    }
 }

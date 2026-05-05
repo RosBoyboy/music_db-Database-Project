@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Head, router } from '@inertiajs/react';
 import axios from 'axios';
-import MainLayout from '../Layouts/MainLayout';
-import TrackCard from '../Components/TrackCard';
-import { usePlayer } from '../Context/PlayerContext';
+import MainLayout from '@/Layouts/MainLayout';
+import TrackCard from '@/Components/Common/TrackCard';
+import { usePlayer } from '@/Context/PlayerContext';
 import { Search as SearchIcon, Loader2, Music, Mic2 } from 'lucide-react';
 
 const TABS = [

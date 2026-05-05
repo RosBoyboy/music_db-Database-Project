@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { router, usePage, Link } from '@inertiajs/react';
-import MusicPlayer from '../Components/MusicPlayer';
+import MusicPlayer from '@/Components/Common/MusicPlayer';
 import axios from 'axios';
-import { usePlayer } from '../Context/PlayerContext';
+import { usePlayer } from '@/Context/PlayerContext';
 
 // ── Recent Searches helpers (localStorage) ─────────────────────────────
 const RECENT_KEY = 'musicstream_recent_searches';

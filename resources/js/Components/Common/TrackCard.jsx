@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Pause } from 'lucide-react';
-import { usePlayer } from '../Context/PlayerContext';
+import { usePlayer } from '@/Context/PlayerContext';
 
 export default function TrackCard({ track, allTracks }) {
   const { play, playQueue, currentTrack, isPlaying, togglePlayPause } = usePlayer();

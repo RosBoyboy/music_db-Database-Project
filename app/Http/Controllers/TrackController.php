@@ -23,7 +23,7 @@ class TrackController extends Controller
     }
     public function index()
     {
-        $tracks = Track::with('artist', 'album')->paginate(20);
+        $tracks = Track::where('status', 'approved')->with('artist', 'album')->paginate(20);
         
         return Inertia::render('Tracks/Index', [
             'tracks' => $tracks
@@ -51,7 +51,7 @@ class TrackController extends Controller
         };
 
         // 1. Recommended
-        $recommendedLocal = \App\Models\Track::with('artist', 'album')->inRandomOrder()->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
+        $recommendedLocal = \App\Models\Track::with('artist', 'album')->where('status', 'approved')->inRandomOrder()->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
         $recommendedSpotify = collect([]);
         if ($recommendedLocal->count() < 6) {
             $spotifyRes = $spotifyService->search('genre:pop', 'track', 6 - $recommendedLocal->count());
@@ -60,7 +60,7 @@ class TrackController extends Controller
         $recommendedTracks = $recommendedLocal->concat($recommendedSpotify);
 
         // 2. New Releases (latest tracks from local first)
-        $newLocal = \App\Models\Track::with('artist', 'album')->latest('id')->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
+        $newLocal = \App\Models\Track::with('artist', 'album')->where('status', 'approved')->latest('id')->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
         $newSpotify = collect([]);
         if ($newLocal->count() < 6) {
             $spotifyRes = $spotifyService->search('tag:new', 'track', 6 - $newLocal->count());
@@ -69,7 +69,7 @@ class TrackController extends Controller
         $newReleases = $newLocal->concat($newSpotify);
 
         // 3. Recently Played
-        $recentLocal = \App\Models\Track::with('artist', 'album')->orderBy('play_count', 'desc')->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
+        $recentLocal = \App\Models\Track::with('artist', 'album')->where('status', 'approved')->orderBy('play_count', 'desc')->take(6)->get()->map(function($t) { $t->source = 'local'; return $t; });
         $recentSpotify = collect([]);
         if ($recentLocal->count() < 6) {
             $spotifyRes = $spotifyService->search('year:2023', 'track', 6 - $recentLocal->count());
@@ -87,7 +87,7 @@ class TrackController extends Controller
             'gradient' => 'from-[#667eea] to-[#764ba2]'
         ];
 
-        return Inertia::render('Home', [
+        return Inertia::render('User/Home', [
             'recommendedTracks' => $recommendedTracks,
             'newReleases' => $newReleases,
             'recentTracks' => $recentTracks,
@@ -103,7 +103,7 @@ class TrackController extends Controller
         
         $dummyPlaylists = $this->getDummyPlaylists();
 
-        return Inertia::render('Explore', [
+        return Inertia::render('User/Explore', [
             'artists' => $artists,
             'albums' => $albums,
             'playlists' => $dummyPlaylists
@@ -115,7 +115,7 @@ class TrackController extends Controller
         $query = $request->get('q', '');
         
         if (!$query || strlen($query) < 2) {
-            return Inertia::render('Search', [
+            return Inertia::render('User/Search', [
                 'query' => $query,
                 'localTracks' => [],
                 'spotifyTracks' => null,
@@ -127,7 +127,7 @@ class TrackController extends Controller
         }
         
         // QUERY 1: LOCAL DATABASE
-        $localTracks = \App\Models\Track::where('name', 'like', "%$query%")
+        $localTracks = \App\Models\Track::where('name', 'like', "%$query%")->where('status', 'approved')
                             ->with('artist', 'album')
                             ->limit(20)
                             ->get();
@@ -158,7 +158,7 @@ class TrackController extends Controller
             // Gracefully fail - show only local results
         }
         
-        return Inertia::render('Search', [
+        return Inertia::render('User/Search', [
             'query' => $query,
             'localTracks' => $localTracks,
             'spotifyTracks' => $spotifyTracks,
@@ -172,7 +172,7 @@ class TrackController extends Controller
     public function artist($id, \App\Services\SpotifyService $spotifyService)
     {
         if (is_numeric($id)) {
-            $artist = \App\Models\Artist::with(['albums', 'tracks.album'])->findOrFail($id);
+            $artist = \App\Models\Artist::with(['albums', 'tracks' => function($q) { $q->where('status', 'approved')->with('album'); }])->findOrFail($id);
             // Add local source tag
             $artist->tracks = $artist->tracks->map(function($t) {
                 $t->source = 'local';
@@ -218,7 +218,7 @@ class TrackController extends Controller
             $artist = json_decode(json_encode($artistData));
         }
         
-        return Inertia::render('ArtistProfile', [
+        return Inertia::render('User/ArtistProfile', [
             'artist' => $artist
         ]);
     }
@@ -259,7 +259,7 @@ class TrackController extends Controller
         };
 
         // Get local tracks first — normalize to same structure as Spotify tracks
-        $localTracks = \App\Models\Track::with('artist', 'album')
+        $localTracks = \App\Models\Track::with('artist', 'album')->where('status', 'approved')
             ->inRandomOrder()
             ->take(8)
             ->get()
@@ -299,7 +299,7 @@ class TrackController extends Controller
         // Update track count to actual count
         $playlist['trackCount'] = $tracks->count();
 
-        return Inertia::render('PlaylistView', [
+        return Inertia::render('User/PlaylistView', [
             'playlist' => $playlist,
             'tracks' => $tracks
         ]);

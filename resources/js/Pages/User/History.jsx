@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import MainLayout from '../Layouts/MainLayout';
-import { usePlayer } from '../Context/PlayerContext';
+import MainLayout from '@/Layouts/MainLayout';
+import { usePlayer } from '@/Context/PlayerContext';
 import { Play, Pause, Clock, Music, Trash2 } from 'lucide-react';
 
 export default function History({ historyTracks }) {

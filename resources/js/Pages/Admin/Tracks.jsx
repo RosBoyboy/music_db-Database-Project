@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { Music, Search, Trash2, Play, Pause } from 'lucide-react';
+import { Music, Search, Trash2, Play, Pause, CheckCircle, XCircle } from 'lucide-react';
 import { usePlayer } from '@/Context/PlayerContext';
 
 export default function Tracks({ tracks, filters }) {
-    const { playTrack, currentTrack, isPlaying, pause } = usePlayer();
+    const { play, currentTrack, isPlaying, pause } = usePlayer();
     const [deleting, setDeleting] = useState(null);
 
     const handleSearch = (e) => {
@@ -23,11 +23,21 @@ export default function Tracks({ tracks, filters }) {
         }
     };
 
+    const handleApprove = (track) => {
+        router.post(`/admin/tracks/${track.id}/approve`, {}, { preserveScroll: true });
+    };
+
+    const handleReject = (track) => {
+        if (confirm(`Are you sure you want to reject "${track.name}"?`)) {
+            router.post(`/admin/tracks/${track.id}/reject`, {}, { preserveScroll: true });
+        }
+    };
+
     const togglePlay = (track) => {
         if (currentTrack?.id === track.id && isPlaying) {
             pause();
         } else {
-            playTrack(track);
+            play(track);
         }
     };
 
@@ -64,6 +74,7 @@ export default function Tracks({ tracks, filters }) {
                                 <th className="px-6 py-4 w-12"></th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Track Info</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Source</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Uploaded By</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Date</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
@@ -91,6 +102,15 @@ export default function Tracks({ tracks, filters }) {
                                                 {track.source}
                                             </span>
                                         </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-2 py-1 text-xs rounded-md uppercase tracking-wider font-semibold ${
+                                                track.status === 'approved' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 
+                                                track.status === 'rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 
+                                                'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                                            }`}>
+                                                {track.status || 'approved'}
+                                            </span>
+                                        </td>
                                         <td className="px-6 py-4 text-sm text-gray-300">
                                             {track.uploader ? (
                                                 <div className="flex items-center gap-2">
@@ -106,7 +126,25 @@ export default function Tracks({ tracks, filters }) {
                                         <td className="px-6 py-4 text-sm text-gray-400">
                                             {new Date(track.created_at).toLocaleDateString()}
                                         </td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                                            {track.status === 'pending' && (
+                                                <>
+                                                    <button 
+                                                        onClick={() => handleApprove(track)}
+                                                        className="p-2 text-gray-500 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition"
+                                                        title="Approve Track"
+                                                    >
+                                                        <CheckCircle className="w-5 h-5" />
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => handleReject(track)}
+                                                        className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition"
+                                                        title="Reject Track"
+                                                    >
+                                                        <XCircle className="w-5 h-5" />
+                                                    </button>
+                                                </>
+                                            )}
                                             <button 
                                                 onClick={() => handleDelete(track)}
                                                 disabled={deleting === track.id}

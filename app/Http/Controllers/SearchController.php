@@ -21,7 +21,7 @@ class SearchController extends Controller
         $query = trim($request->get('q', ''));
 
         if (!$query || strlen($query) < 2) {
-            return Inertia::render('Search', [
+            return Inertia::render('User/Search', [
                 'query'          => $query,
                 'localTracks'    => [],
                 'localArtists'   => [],
@@ -33,7 +33,7 @@ class SearchController extends Controller
 
         [$local, $spotify] = $this->runHybridSearch($query);
 
-        return Inertia::render('Search', array_merge(
+        return Inertia::render('User/Search', array_merge(
             ['query' => $query],
             $local,
             $spotify

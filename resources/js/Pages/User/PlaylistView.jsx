@@ -1,8 +1,8 @@
 import React from 'react';
 import { Head, router } from '@inertiajs/react';
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '@/Layouts/MainLayout';
 import { Play, Shuffle, Plus, Heart, MoreHorizontal, Clock, Music } from 'lucide-react';
-import { usePlayer } from '../Context/PlayerContext';
+import { usePlayer } from '@/Context/PlayerContext';
 
 export default function PlaylistView({ playlist, tracks: rawTracks }) {
   const { play, playQueue, currentTrack, isPlaying } = usePlayer();

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
-import MainLayout from '../../Layouts/MainLayout';
+import MainLayout from '@/Layouts/MainLayout';
 import { Music, ChevronLeft } from 'lucide-react';
 
 const GRADIENTS = [

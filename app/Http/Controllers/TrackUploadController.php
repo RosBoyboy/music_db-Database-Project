@@ -95,6 +95,7 @@ class TrackUploadController extends Controller
             'album_id' => $album ? $album->id : null,
             'preview_url' => null,
             'uploaded_by' => Auth::id(),
+            'status' => 'pending',
         ]);
 
         // Inertia's useForm.post() expects a redirect response

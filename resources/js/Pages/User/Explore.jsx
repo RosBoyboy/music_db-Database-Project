@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, router, Link } from '@inertiajs/react';
-import MainLayout from '../Layouts/MainLayout';
+import MainLayout from '@/Layouts/MainLayout';
 import { ChevronRight } from 'lucide-react';
 
 export default function Explore({ artists, albums, playlists }) {

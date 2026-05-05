@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePlayer } from '../Context/PlayerContext';
+import { usePlayer } from '@/Context/PlayerContext';
 import { usePage, router } from '@inertiajs/react';
 import axios from 'axios';
 

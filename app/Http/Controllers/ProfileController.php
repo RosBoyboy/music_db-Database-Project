@@ -14,7 +14,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request)
     {
-        return Inertia::render('Profile/Edit', [
+        return Inertia::render('User/Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail,
             'status' => session('status'),
         ]);
@@ -64,7 +64,7 @@ class ProfileController extends Controller
     public function updateAvatar(Request $request)
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'max:2048'], // Max 2MB
+            'avatar' => ['required', 'image', 'max:20480'], // Max 20MB
         ]);
 
         $user = $request->user();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
-import MainLayout from '../../Layouts/MainLayout';
-import { usePlayer } from '../../Context/PlayerContext';
+import MainLayout from '@/Layouts/MainLayout';
+import { usePlayer } from '@/Context/PlayerContext';
 import { Play, Pause, Shuffle, Trash2, Plus, Music, Clock, Search, X, ChevronLeft, MoreHorizontal } from 'lucide-react';
 import axios from 'axios';
 
