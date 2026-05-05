@@ -40,7 +40,7 @@ export default function ArtistProfile({ artist }) {
   };
 
   return (
-    <MainLayout>
+    <>
       <Head title={`${artist.name} | SoundWave`} />
       
       {/* Artist Hero Banner */}
@@ -70,7 +70,7 @@ export default function ArtistProfile({ artist }) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto pb-24">
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-6 pb-24">
         {/* Action Buttons */}
         <div className="flex items-center gap-4 mb-10">
           <button
@@ -169,6 +169,8 @@ export default function ArtistProfile({ artist }) {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+ArtistProfile.layout = page => <MainLayout children={page} />;

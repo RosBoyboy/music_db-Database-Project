@@ -42,7 +42,7 @@ export default function History({ historyTracks }) {
   const totalTracks = historyTracks?.length || 0;
 
   return (
-    <MainLayout>
+    <>
       <Head title="History | SoundWave" />
 
       <div className="max-w-5xl mx-auto text-white">
@@ -152,6 +152,8 @@ export default function History({ historyTracks }) {
           </div>
         )}
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+History.layout = page => <MainLayout children={page} />;

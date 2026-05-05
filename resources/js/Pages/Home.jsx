@@ -13,7 +13,7 @@ export default function Home({ recommendedTracks, newReleases, recentTracks, use
   };
 
   return (
-    <MainLayout>
+    <>
       <Head title="Dashboard" />
       <div className="text-white pb-24">
         {/* Breadcrumbs Navigation */}
@@ -25,7 +25,7 @@ export default function Home({ recommendedTracks, newReleases, recentTracks, use
         <span className="text-white font-medium">Dashboard</span>
       </nav>
 
-      <div className="max-w-7xl mx-auto space-y-12">
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-6 space-y-12">
         
         {/* Featured Banner - YouTube Music style */}
         <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-r ${featuredPlaylist.gradient} min-h-[200px] lg:min-h-[260px] flex items-center shadow-2xl shadow-[#667eea]/20`}>
@@ -153,6 +153,8 @@ export default function Home({ recommendedTracks, newReleases, recentTracks, use
 
       </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+Home.layout = page => <MainLayout children={page} />;

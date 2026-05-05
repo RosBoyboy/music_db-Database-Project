@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { router, usePage } from '@inertiajs/react';
+import { router, usePage, Link } from '@inertiajs/react';
 import MusicPlayer from '../Components/MusicPlayer';
 import axios from 'axios';
 import { usePlayer } from '../Context/PlayerContext';
@@ -172,10 +172,10 @@ export default function MainLayout({ children }) {
     const navLink = (href, label, icon) => {
         const isActive = url.startsWith(href);
         return (
-            <a href={href} className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition font-medium ${isActive ? 'text-white bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+            <Link href={href} className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition font-medium ${isActive ? 'text-white bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
                 {icon}
                 {label}
-            </a>
+            </Link>
         );
     };
 
@@ -199,10 +199,10 @@ export default function MainLayout({ children }) {
                             {navLink('/liked', 'Liked Songs', <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>)}
                             {navLink('/history', 'History', <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>)}
                             {usePage().props.auth.user?.is_artist && (
-                                <a href="/upload" className="flex items-center gap-3 px-4 py-2.5 text-purple-400 hover:text-purple-300 hover:bg-purple-400/10 rounded-lg transition font-medium">
+                                <Link href="/upload" className="flex items-center gap-3 px-4 py-2.5 text-purple-400 hover:text-purple-300 hover:bg-purple-400/10 rounded-lg transition font-medium">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                     Artist Dashboard
-                                </a>
+                                </Link>
                             )}
                         </nav>
                     </div>
@@ -216,7 +216,7 @@ export default function MainLayout({ children }) {
                             {userPlaylists.length > 0 ? userPlaylists.map(pl => {
                                 const isActive = url === `/my-playlist/${pl.id}`;
                                 return (
-                                    <a key={pl.id} href={`/my-playlist/${pl.id}`}
+                                    <Link key={pl.id} href={`/my-playlist/${pl.id}`}
                                        className={`flex items-center gap-2.5 px-4 py-2 text-sm rounded-lg transition truncate ${
                                          isActive ? 'text-white bg-white/10 font-medium' : 'text-gray-400 hover:text-white hover:bg-white/5'
                                        }`}>
@@ -225,7 +225,7 @@ export default function MainLayout({ children }) {
                                         </div>
                                         <span className="truncate">{pl.name}</span>
                                         {pl.tracks_count > 0 && <span className="text-gray-600 text-xs ml-auto flex-shrink-0">{pl.tracks_count}</span>}
-                                    </a>
+                                    </Link>
                                 );
                             }) : (
                                 <button onClick={() => router.visit('/my-playlists/create')} className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition w-full">
@@ -329,9 +329,13 @@ export default function MainLayout({ children }) {
                             <div className="relative">
                                 <button 
                                     onClick={() => setShowProfileMenu(!showProfileMenu)}
-                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-sm shadow-md hover:ring-2 hover:ring-white/50 transition"
+                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-sm shadow-md hover:ring-2 hover:ring-white/50 transition overflow-hidden"
                                 >
-                                    {usePage().props.auth.user.name.charAt(0).toUpperCase()}
+                                    {usePage().props.auth.user.avatar_url ? (
+                                        <img src={usePage().props.auth.user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        usePage().props.auth.user.name.charAt(0).toUpperCase()
+                                    )}
                                 </button>
                                 
                                 {showProfileMenu && (
@@ -339,8 +343,12 @@ export default function MainLayout({ children }) {
                                         <div className="fixed inset-0 z-40" onClick={() => setShowProfileMenu(false)}></div>
                                         <div className="absolute right-0 top-full mt-2 w-72 bg-[#282828] rounded-xl shadow-2xl z-50 border border-white/10 overflow-hidden text-sm">
                                             <div className="p-4 border-b border-white/10 flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white flex items-center justify-center font-bold flex-shrink-0 text-lg">
-                                                    {usePage().props.auth.user.name.charAt(0).toUpperCase()}
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white flex items-center justify-center font-bold flex-shrink-0 text-lg overflow-hidden">
+                                                    {usePage().props.auth.user.avatar_url ? (
+                                                        <img src={usePage().props.auth.user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        usePage().props.auth.user.name.charAt(0).toUpperCase()
+                                                    )}
                                                 </div>
                                                 <div className="flex-col flex overflow-hidden">
                                                     <span className="text-white font-semibold truncate">{usePage().props.auth.user.name}</span>
@@ -363,6 +371,16 @@ export default function MainLayout({ children }) {
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                                                     Switch account
                                                 </button>
+                                                <button onClick={() => { setShowProfileMenu(false); router.visit('/settings'); }} className="w-full flex items-center gap-4 px-4 py-2 hover:bg-white/10 text-gray-200 transition">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                                    Settings
+                                                </button>
+                                                {usePage().props.auth.user.is_admin && (
+                                                    <button onClick={() => { setShowProfileMenu(false); router.visit('/admin'); }} className="w-full flex items-center gap-4 px-4 py-2 hover:bg-white/10 text-gray-200 transition text-red-400">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                                        Admin Panel
+                                                    </button>
+                                                )}
                                                 <button onClick={() => { setShowProfileMenu(false); clearPlayer(); router.post('/logout'); }} className="w-full flex items-center gap-4 px-4 py-2 hover:bg-white/10 text-gray-200 transition">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                                                     Sign out

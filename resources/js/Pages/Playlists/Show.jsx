@@ -86,7 +86,7 @@ export default function Show({ playlist, tracks: initialTracks, isOwner }) {
   const isTrackInPlaylist = (track) => tracks.some(t => String(t.id) === String(track.id) && t.source === track.source);
 
   return (
-    <MainLayout>
+    <>
       <Head title={`${playlist.name} | SoundWave`} />
 
       <div className="max-w-5xl mx-auto text-white">
@@ -264,6 +264,8 @@ export default function Show({ playlist, tracks: initialTracks, isOwner }) {
           </div>
         </div>
       )}
-    </MainLayout>
+    </>
   );
 }
+
+Show.layout = page => <MainLayout children={page} />;

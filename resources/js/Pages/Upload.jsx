@@ -67,7 +67,7 @@ export default function Upload() {
 
     if (!isArtist) {
         return (
-            <MainLayout>
+            <>
                 <Head title="Become an Artist" />
                 <div className="flex flex-col items-center justify-center h-[70vh] text-center px-4">
                     <div className="w-20 h-20 bg-purple-500/20 rounded-full flex items-center justify-center mb-6">
@@ -86,14 +86,14 @@ export default function Upload() {
                         Become an Artist
                     </button>
                 </div>
-            </MainLayout>
+            </>
         );
     }
 
     return (
-        <MainLayout>
+        <>
             <Head title="Artist Dashboard" />
-            <div className="p-8 max-w-6xl mx-auto">
+            <div className="w-full p-8 lg:px-10 xl:px-12">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-white tracking-tight">Artist Dashboard</h1>
@@ -213,6 +213,8 @@ export default function Upload() {
                     </div>
                 </div>
             </div>
-        </MainLayout>
+        </>
     );
 }
+
+Upload.layout = page => <MainLayout children={page} />;

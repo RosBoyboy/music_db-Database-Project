@@ -18,14 +18,17 @@ class DatabaseSeeder extends Seeder
         $freePlan    = SubscriptionPlan::create(['name' => 'Free',    'price' => 0.00]);
         $premiumPlan = SubscriptionPlan::create(['name' => 'Premium', 'price' => 9.99]);
 
-        // ─── Users ────────────────────────────────────────────────
-        User::factory()->create([
+        $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin']);
+        $artistRole = \App\Models\Role::firstOrCreate(['name' => 'artist']);
+        $userRole = \App\Models\Role::firstOrCreate(['name' => 'user']);
+
+        $adminUser = User::factory()->create([
             'name'                 => 'Admin User',
             'email'                => 'admin@example.com',
             'password'             => bcrypt('password'),
-            'role'                 => 'admin',
             'subscription_plan_id' => $premiumPlan->id,
         ]);
+        $adminUser->roles()->attach($adminRole->id);
         User::factory(5)->create(['subscription_plan_id' => $freePlan->id]);
 
         // ─── Genres ───────────────────────────────────────────────

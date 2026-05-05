@@ -46,6 +46,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/tracks/my',       [TrackUploadController::class, 'index']);
     Route::post('/api/tracks/upload',  [TrackUploadController::class, 'upload']);
     Route::delete('/api/tracks/{id}',  [TrackUploadController::class, 'destroy']);
+
+    // Profile & Settings
+    Route::get('/settings', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('settings');
+    Route::put('/settings/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('settings.profile');
+    Route::put('/settings/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('settings.password');
+    Route::post('/settings/avatar', [\App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('settings.avatar');
+
+    // Admin Dashboard
+    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
+        Route::get('/tracks', [\App\Http\Controllers\AdminController::class, 'tracks'])->name('admin.tracks');
+        Route::delete('/tracks/{id}', [\App\Http\Controllers\AdminController::class, 'deleteTrack'])->name('admin.tracks.delete');
+    });
 });
 
 // Stream a local track (public so the audio player can reach it)

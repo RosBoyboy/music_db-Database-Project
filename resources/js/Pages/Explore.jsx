@@ -15,10 +15,10 @@ export default function Explore({ artists, albums, playlists }) {
   ];
 
   return (
-    <MainLayout>
+    <>
       <Head title="Explore" />
       <div className="text-white pb-24">
-        <div className="max-w-7xl mx-auto space-y-12">
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-6 space-y-12">
           
           <div>
             <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Explore</h1>
@@ -148,6 +148,8 @@ export default function Explore({ artists, albums, playlists }) {
           
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+Explore.layout = page => <MainLayout children={page} />;

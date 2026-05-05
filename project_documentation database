@@ -1,0 +1,92 @@
+# Music Streaming Database Project Documentation
+
+## 1. Project Overview
+The Music Streaming Database Project is a modern, full-stack web application designed to provide a rich audio streaming experience. It supports multiple user roles, allowing listeners to discover and organize music, artists to upload and manage their tracks, and administrators to oversee the platform.
+
+The application uses a **monolithic architecture** powered by Laravel for a robust backend and React (via Inertia.js) for a dynamic, single-page application (SPA) user experience.
+
+## 2. Technology Stack
+
+### Backend
+- **Framework:** Laravel 10 (PHP 8.1+)
+- **Database:** MySQL / MariaDB (managed via Eloquent ORM & Laravel Migrations)
+- **Authentication:** Laravel Sanctum (session-based authentication for SPA)
+
+### Frontend
+- **Framework:** React 19
+- **Routing & Data Bridge:** Inertia.js (Laravel adapter v2.0, React adapter v3.0)
+- **Styling:** Tailwind CSS (with PostCSS & Autoprefixer)
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **Build Tool:** Vite
+
+## 3. Core Features & Modules
+
+### Authentication & Authorization
+- **User Registration & Login:** Standard email/password authentication.
+- **Demo Login:** Quick access feature for testing or guest exploration.
+- **Role-based Access Control (RBAC):** Users are assigned specific roles (User, Artist, Admin) which dictate their permissions across the platform.
+
+### Audio & Track Management
+- **Music Player:** Persistent audio playback across route changes.
+- **Track Streaming:** Secure local track streaming via dedicated endpoints (`/api/tracks/stream/{id}`).
+- **Artist Uploads:** Users can choose to "Become an Artist" to unlock upload capabilities, allowing them to upload audio files, provide track metadata, and set cover art.
+
+### Discovery & Search
+- **Explore Page:** Browse new, trending, or categorized tracks.
+- **Live Search:** Fast, debounced AJAX search from the React frontend returning JSON APIs for tracks, artists, and albums.
+- **Search Suggestions:** Lightweight autocomplete suggestions while typing.
+
+### User Library
+- **Liked Songs:** Users can toggle likes on tracks, which are saved to their personal library.
+- **Listening History:** The system records playback history to allow users to revisit recently played tracks.
+- **Playlists:** Complete CRUD (Create, Read, Update, Delete) functionality for custom playlists, including adding/removing specific tracks.
+
+### User Profiles & Settings
+- **Profile Management:** Update display name, email, password, and avatar images.
+- **Artist Profiles:** Dedicated public pages displaying an artist's uploaded tracks and details.
+
+### Administration
+- **Admin Dashboard:** A restricted area (`/admin`) for platform administrators.
+- **User Management:** View and manage registered users.
+- **Content Moderation:** View and delete tracks to enforce platform guidelines.
+
+## 4. Database Architecture
+
+The system's database is designed relationally to support complex queries efficiently. Key entities include:
+
+* **Users (`users`):** Stores core user credentials and profile details (e.g., `name`, `email`, `password`, `avatar_url`).
+* **Roles (`roles`, `role_user`):** Defines system roles (Admin, Artist, User) and maps them to users via a pivot table.
+* **Artists (`artists`):** Linked to a `user_id`. Stores artist-specific metadata (e.g., bio).
+* **Tracks (`tracks`):** The core media entity. Stores `artist_id`, `title`, `duration`, `file_path`, `cover_image`, `preview_url`, etc.
+* **Albums (`albums`):** Groups tracks. Links to `artist_id`.
+* **Genres (`genres`, `genre_track`):** Categorization tags mapped to tracks via a many-to-many pivot table.
+* **User Interactions:**
+  * **Likes (`user_likes`):** Many-to-many relationship between users and tracks.
+  * **History (`user_history`):** Logs when a user played a specific track (`user_id`, `track_id`, `played_at`).
+* **Playlists (`playlists`, `playlist_track`):** 
+  * `playlists`: Stores playlist metadata (`user_id`, `name`, `description`, `is_public`).
+  * `playlist_track`: Pivot table mapping tracks to playlists, including ordering/position.
+
+## 5. API & Routing Structure
+
+The application heavily utilizes Inertia.js, meaning many "API" endpoints actually return Inertia React page components rather than raw JSON, though AJAX endpoints are used for dynamic interactions.
+
+**Key Route Groups:**
+- **`/` , `/home`, `/explore`**: Public/discovery pages.
+- **`/search`, `/api/search`**: Search pages and JSON endpoints.
+- **`/upload`, `/api/tracks/my`**: Artist dashboard and track management APIs.
+- **`/settings/*`**: User profile configuration endpoints.
+- **`/liked`, `/history`**: Library views.
+- **`/api/like-track`, `/api/record-history`**: Silent AJAX endpoints for player interactions.
+- **`/my-playlists/*`**: Playlist management.
+- **`/admin/*`**: Admin protected routes (guarded by `role:admin` middleware).
+
+## 6. Development Workflow
+
+- **Local Server:** `php artisan serve`
+- **Asset Compilation:** `npm run dev` (Vite dev server with React Fast Refresh)
+- **Database Migrations:** `php artisan migrate`
+
+> [!NOTE]
+> The application uses a tightly coupled monolithic approach where Laravel handles all routing, middleware, and database interactions, while React focuses purely on rendering the UI layer and managing local component state.

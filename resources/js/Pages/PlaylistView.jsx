@@ -32,7 +32,7 @@ export default function PlaylistView({ playlist, tracks: rawTracks }) {
   };
 
   return (
-    <MainLayout>
+    <>
       <Head title={`${playlist.name} | SoundWave`} />
       
       <div className="max-w-7xl mx-auto pb-24 text-white">
@@ -145,6 +145,8 @@ export default function PlaylistView({ playlist, tracks: rawTracks }) {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+PlaylistView.layout = page => <MainLayout children={page} />;

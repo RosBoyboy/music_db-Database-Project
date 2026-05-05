@@ -38,7 +38,7 @@ export default function Create() {
   // If not logged in, redirect to login
   if (!auth?.user) {
     return (
-      <MainLayout>
+      <>
         <Head title="Create Playlist | SoundWave" />
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
@@ -53,12 +53,12 @@ export default function Create() {
             Log in
           </button>
         </div>
-      </MainLayout>
+      </>
     );
   }
 
   return (
-    <MainLayout>
+    <>
       <Head title="New Playlist | SoundWave" />
 
       <div className="max-w-2xl mx-auto text-white">
@@ -161,6 +161,8 @@ export default function Create() {
           </div>
         </form>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+Create.layout = page => <MainLayout children={page} />;

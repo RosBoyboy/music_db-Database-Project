@@ -42,10 +42,10 @@ export default function LikedSongs({ likedTracks }) {
   const totalTracks = likedTracks?.length || 0;
 
   return (
-    <MainLayout>
+    <>
       <Head title="Liked Songs | SoundWave" />
 
-      <div className="max-w-7xl mx-auto text-white">
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-6 text-white">
 
         {/* ── Header ── */}
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 mb-10 items-end">
@@ -193,6 +193,8 @@ export default function LikedSongs({ likedTracks }) {
           </div>
         )}
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+LikedSongs.layout = page => <MainLayout children={page} />;

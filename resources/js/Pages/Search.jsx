@@ -229,10 +229,10 @@ export default function Search({ query: initialQuery, localTracks, localArtists,
   const showTab = (id) => activeTab === 'all' || activeTab === id;
 
   return (
-    <MainLayout>
+    <>
       <Head title={inputValue ? `Search: ${inputValue}` : 'Search'} />
       <div className="text-white pb-28">
-        <div className="max-w-7xl mx-auto space-y-8">
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 py-6 space-y-8">
 
           {/* ── Header ────────────────────────────────────────────── */}
           <div className="flex items-center justify-between">
@@ -407,6 +407,8 @@ export default function Search({ query: initialQuery, localTracks, localArtists,
 
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }
+
+Search.layout = page => <MainLayout children={page} />;
